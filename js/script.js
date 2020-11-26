@@ -66,6 +66,24 @@ function render() {
 
     return button;
   }
+  // Função para fazer o span clicavel para edição
+  function createSpan(name) {
+    // Função que ao cliocar retorna o intem para o input
+    // para ficar editavel
+    function editItem() {
+      inputName.value = name;
+      // Ao clicar no nome o usuario é redirecionado para o input para edição
+      inputName.focus();
+    }
+    var span = document.createElement('span');
+    // adicionando a classe CSS no span
+    span.classList.add('clickable');
+    span.textContent = name;
+    // editItem é referente a edição do nome
+    span.addEventListener('click', editItem);
+    return span;
+  }
+
   var divNames = document.querySelector('#names');
   // faz com que não dupliqueo array
   divNames.innerHTML = '';
@@ -77,9 +95,8 @@ function render() {
     // link com o botão deletar da função de deletar botao
     // O indice i é responsável em identificar qual elemento estou deletando
     var button = createDeleteButton(i);
+    var span = createSpan(currentName);
 
-    var span = document.createElement('span');
-    span.textContent = currentName;
     // adicionando filho ao elemento li
     li.appendChild(button);
     li.appendChild(span);
