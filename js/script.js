@@ -2,6 +2,8 @@ window.addEventListener('load', start);
 
 var globalNames = ['André', 'Matheus', 'Valéria'];
 var inputName = null;
+// edicáo do item
+var isediting = false;
 
 // Seguencia de carregamento de códigos JAvascript
 function start() {
@@ -27,12 +29,24 @@ function activateInput() {
     // console.log(globalNames);
     render();
   }
+
+  // Função a'pos edição do texto
+  function updateName(newName) {
+    // Localizar o elemento no vetor, clicar e editar
+  }
+
   function handleTyping(event) {
     // Captura as informações digitadas após o usuário  digitar enter
     if (event.key === 'Enter') {
-      // console.log(event.target.value);
-      // Push é responsável em pegar o elemento do vetor
-      insertName(event.target.value);
+      // inserindo a opção de edição do item sem ter que criar um novo
+      if (isediting) {
+        updateName(event.target.value);
+      } else {
+        // console.log(event.target.value);
+        // Push é responsável em pegar o elemento do vetor
+        insertName(event.target.value);
+      }
+      isediting = false;
     }
   }
   // Captura a digitação do usuario quando a tecla é soltada
@@ -67,13 +81,16 @@ function render() {
     return button;
   }
   // Função para fazer o span clicavel para edição
-  function createSpan(name) {
+  function createSpan(name, index) {
     // Função que ao cliocar retorna o intem para o input
     // para ficar editavel
     function editItem() {
       inputName.value = name;
       // Ao clicar no nome o usuario é redirecionado para o input para edição
       inputName.focus();
+      isediting = true;
+      //Faz referencia ao index do inicio da função
+      currentIndex = index;
     }
     var span = document.createElement('span');
     // adicionando a classe CSS no span
@@ -95,7 +112,8 @@ function render() {
     // link com o botão deletar da função de deletar botao
     // O indice i é responsável em identificar qual elemento estou deletando
     var button = createDeleteButton(i);
-    var span = createSpan(currentName);
+    // o i vai fazer referencia a função create span
+    var span = createSpan(currentName, i);
 
     // adicionando filho ao elemento li
     li.appendChild(button);
