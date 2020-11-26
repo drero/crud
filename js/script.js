@@ -2,6 +2,7 @@ window.addEventListener('load', start);
 
 var globalNames = ['André', 'Matheus', 'Valéria'];
 var inputName = null;
+var currentIndex = null;
 // edicáo do item
 var isediting = false;
 
@@ -27,17 +28,19 @@ function activateInput() {
   function insertName(newName) {
     globalNames.push(newName);
     // console.log(globalNames);
-    render();
+    // render(); foi inserido antes de isediting = false;
   }
 
   // Função a'pos edição do texto
   function updateName(newName) {
     // Localizar o elemento no vetor, clicar e editar
+    globalNames[currentIndex] = newName;
+    // render(); foi inserido antes de isediting = false;
   }
 
   function handleTyping(event) {
     // Captura as informações digitadas após o usuário  digitar enter
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && event.target.value.trim() !== '') {
       // inserindo a opção de edição do item sem ter que criar um novo
       if (isediting) {
         updateName(event.target.value);
@@ -46,7 +49,9 @@ function activateInput() {
         // Push é responsável em pegar o elemento do vetor
         insertName(event.target.value);
       }
+      render();
       isediting = false;
+      clearInput();
     }
   }
   // Captura a digitação do usuario quando a tecla é soltada
