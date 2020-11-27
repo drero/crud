@@ -1,135 +1,126 @@
-window.addEventListener('load', start);
+// Substituí por defer
+// window.addEventListener('load', start);
 
-var globalNames = ['André', 'Matheus', 'Valéria'];
-var inputName = null;
-var currentIndex = null;
-// edicáo do item
-var isediting = false;
+var globalInputValue = null;
+var globalInputDescription = null;
 
-// Seguencia de carregamento de códigos JAvascript
 function start() {
-  inputName = document.querySelector('#inputName');
-  preventFormSubmit();
-  activateInput();
-  render();
+  globalInputValue = document.querySelector('#inputValue');
+  globalInputDescription = document.querySelector('#inputDescription');
+
+  var inputRange = document.querySelector('#inputRange');
+  inputRange.addEventListener('input', handleRangeChange);
 }
 
-function preventFormSubmit() {
-  function handleFormSubmit(event) {
-    // event.preventDefault() Evita que a página
-    // seja recarregada ao enviar o submite do fromulário
-    event.preventDefault();
-  }
-  var form = document.querySelector('form');
-  form.addEventListener('submit', handleFormSubmit);
+function handleRangeChange(event) {
+  var rangeValue = event.target.value;
+
+  globalInputValue.value = rangeValue;
+  globalInputDescription.value = numberToDescription(rangeValue);
 }
 
-function activateInput() {
-  function insertName(newName) {
-    globalNames.push(newName);
-    // console.log(globalNames);
-    // render(); foi inserido antes de isediting = false;
+function numberToDescription(number) {
+  const size = number.toString().length;
+
+  if (size === 1) {
+    return sizeOneDescription(number);
   }
 
-  // Função a'pos edição do texto
-  function updateName(newName) {
-    // Localizar o elemento no vetor, clicar e editar
-    globalNames[currentIndex] = newName;
-    // render(); foi inserido antes de isediting = false;
+  if (size === 2) {
+    return sizeTwoDescription(number);
   }
 
-  function handleTyping(event) {
-    // Captura as informações digitadas após o usuário  digitar enter
-    if (event.key === 'Enter' && event.target.value.trim() !== '') {
-      // inserindo a opção de edição do item sem ter que criar um novo
-      if (isediting) {
-        updateName(event.target.value);
-      } else {
-        // console.log(event.target.value);
-        // Push é responsável em pegar o elemento do vetor
-        insertName(event.target.value);
-      }
-      render();
-      isediting = false;
-      clearInput();
-    }
+  if (size === 3) {
+    return sizeThreeDescription(number);
   }
-  // Captura a digitação do usuario quando a tecla é soltada
-  inputName.addEventListener('keyup', handleTyping);
-  // Ao recarregar a página automaticamente vai para o campo de texto
-  // onde o usuário deverá preencher o nome apenas digitando se ter que
-  // selecionar o compo de texto
-  inputName.focus();
+
+  return 'Não consegui identificar o número...';
 }
 
-function render() {
-  // Função da ação de deletar
-  // Index faz referencia ao i
-  function createDeleteButton(index) {
-    function deleteName() {
-      // Como a função esta dentro de outra função agora a função Deleta Name
-      // tem acesso ao index, e neste caso deletamos o index na posição 1
-      // Metodo conhecido no react como closer
-      globalNames.splice(index, 1);
-      // Chamamos o render novamente po que acabmos de mexer no estado
-      render();
-    }
-    // Criando o botão de apagar
-    var button = document.createElement('button');
-    // Adicionando um css no botão
-    button.classList.add('deleteButton');
-    // editando o botão
-    button.textContent = 'x';
-    // evento que determina o que acontecerá quando clicar no botão "x"
-    button.addEventListener('click', deleteName);
-
-    return button;
-  }
-  // Função para fazer o span clicavel para edição
-  function createSpan(name, index) {
-    // Função que ao cliocar retorna o intem para o input
-    // para ficar editavel
-    function editItem() {
-      inputName.value = name;
-      // Ao clicar no nome o usuario é redirecionado para o input para edição
-      inputName.focus();
-      isediting = true;
-      //Faz referencia ao index do inicio da função
-      currentIndex = index;
-    }
-    var span = document.createElement('span');
-    // adicionando a classe CSS no span
-    span.classList.add('clickable');
-    span.textContent = name;
-    // editItem é referente a edição do nome
-    span.addEventListener('click', editItem);
-    return span;
-  }
-
-  var divNames = document.querySelector('#names');
-  // faz com que não dupliqueo array
-  divNames.innerHTML = '';
-  var ul = document.createElement('ul');
-  for (var i = 0; i < globalNames.length; i++) {
-    var currentName = globalNames[i];
-
-    var li = document.createElement('li');
-    // link com o botão deletar da função de deletar botao
-    // O indice i é responsável em identificar qual elemento estou deletando
-    var button = createDeleteButton(i);
-    // o i vai fazer referencia a função create span
-    var span = createSpan(currentName, i);
-
-    // adicionando filho ao elemento li
-    li.appendChild(button);
-    li.appendChild(span);
-    ul.appendChild(li);
-  }
-  divNames.appendChild(ul);
-  clearInput();
+function sizeOneDescription(number) {
+  if (number === '0') return 'zero';
+  if (number === '1') return 'um';
+  if (number === '2') return 'dois';
+  if (number === '3') return 'três';
+  if (number === '4') return 'quatro';
+  if (number === '5') return 'cinco';
+  if (number === '6') return 'seis';
+  if (number === '7') return 'sete';
+  if (number === '8') return 'oito';
+  if (number === '9') return 'nove';
 }
-// Após o enter retorna o campo fazio e volta para o campo input
-function clearInput() {
-  inputName.value = '';
-  inputName.focus();
+
+function sizeTwoDescription(number) {
+  if (number === '10') return 'dez';
+  if (number === '11') return 'onze';
+  if (number === '12') return 'doze';
+  if (number === '13') return 'treze';
+  if (number === '14') return 'quatorze';
+  if (number === '15') return 'quinze';
+  if (number === '16') return 'dezesseis';
+  if (number === '17') return 'dezessete';
+  if (number === '18') return 'dezoito';
+  if (number === '19') return 'dezenove';
+  if (number === '20') return 'vinte';
+  if (number === '30') return 'trinta';
+  if (number === '40') return 'quarenta';
+  if (number === '50') return 'cinquenta';
+  if (number === '60') return 'sessenta';
+  if (number === '70') return 'setenta';
+  if (number === '80') return 'oitenta';
+  if (number === '90') return 'noventa';
+
+  var firstCharacter = number[0];
+  var secondCharacter = number[1];
+
+  var prefix = '';
+
+  if (firstCharacter === '2') prefix = 'vinte e ';
+  if (firstCharacter === '3') prefix = 'trinta e ';
+  if (firstCharacter === '4') prefix = 'quarenta e ';
+  if (firstCharacter === '5') prefix = 'cinquenta e ';
+  if (firstCharacter === '6') prefix = 'sessenta e ';
+  if (firstCharacter === '7') prefix = 'setenta e ';
+  if (firstCharacter === '8') prefix = 'oitenta e ';
+  if (firstCharacter === '9') prefix = 'noventa e ';
+
+  return prefix + sizeOneDescription(secondCharacter);
 }
+
+function sizeThreeDescription(number) {
+  if (number === '100') return 'cem';
+  if (number === '200') return 'duzentos';
+  if (number === '300') return 'trezentos';
+  if (number === '400') return 'quatrocentos';
+  if (number === '500') return 'quinhentos';
+  if (number === '600') return 'seiscentos';
+  if (number === '700') return 'setecentos';
+  if (number === '800') return 'oitocentos';
+  if (number === '900') return 'novecentos';
+
+  var firstCharacter = number[0];
+  var prefix = '';
+
+  if (firstCharacter === '1') prefix = 'cento e ';
+  if (firstCharacter === '2') prefix = 'duzentos e ';
+  if (firstCharacter === '3') prefix = 'trezentos e ';
+  if (firstCharacter === '4') prefix = 'quatrocentos e ';
+  if (firstCharacter === '5') prefix = 'quinhentos e ';
+  if (firstCharacter === '6') prefix = 'seiscentos e ';
+  if (firstCharacter === '7') prefix = 'setecentos e ';
+  if (firstCharacter === '8') prefix = 'oitocentos e ';
+  if (firstCharacter === '9') prefix = 'novecentos e ';
+
+  var secondCharacter = number[1];
+  var thirdCharacter = number[2];
+  var secondAndThirdCharacters = number.substring(1);
+
+  if (secondCharacter === '0') {
+    //201
+    return prefix + sizeOneDescription(thirdCharacter);
+  }
+
+  return prefix + sizeTwoDescription(secondAndThirdCharacters);
+}
+
+start();
